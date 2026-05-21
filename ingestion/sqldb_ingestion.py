@@ -6,6 +6,7 @@ import pandas as pd
 import urllib
 from mssql_python import connect
 import struct
+from datetime import datetime, timezone
 
 print("............................................................")
 print("............................................................")
@@ -111,7 +112,8 @@ def blob_file_download(engine):
         else:
             file_name=blob["name"][:blob["name"].index(".csv")]
         print("Uploading data from {} to {}!".format(blob["name"],database_name))
-        df.to_sql("staging_"+file_name,engine,if_exists="replace",chunksize=1000)
+        df['loaded_at_timestamp']=datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+        df.to_sql(file_name,engine,if_exists="replace",chunksize=1000,schema="raw")
         print("")
         print("Upload complete!")
         print("Next......")
