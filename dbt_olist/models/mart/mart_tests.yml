@@ -1,0 +1,99 @@
+models:
+  - name: dim_customer
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_products
+    columns:
+      - name: product_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_sellers
+    columns:
+      - name: seller_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fact_order_items
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+            combination_of_columns:
+              - order_id
+              - item_id
+    columns: 
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+                to: ref('fact_orders')
+                field: order_id
+      - name: item_id
+        data_tests:
+          - not_null
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+                to: ref('dim_products')
+                field: product_id
+      - name: seller_id
+        data_tests:
+          - not_null
+          - relationships:
+                to: ref('dim_sellers')
+                field: seller_id
+
+  - name: fact_order_payments
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+            combination_of_columns:
+              - order_id
+              - payment_sequential
+    columns: 
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+                to: ref('fact_orders')
+                field: order_id
+      - name: payment_sequential
+        data_tests:
+          - not_null
+
+  - name: fact_orders
+    columns: 
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+                to: ref('dim_customer')
+                field: customer_id
+
+
+  - name: fact_reviews
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+            combination_of_columns:
+              - order_id
+              - review_id
+    columns: 
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+                to: ref('fact_orders')
+                field: order_id
+      - name: review_id
+        data_tests:
+          - not_null
+

@@ -1,0 +1,84 @@
+models:
+  - name: customer
+    columns: 
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: geolocation
+    columns: 
+      - name: zip_code
+        data_tests:
+          - not_null
+
+  - name: order_items
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+            combination_of_columns:
+              - order_id
+              - item_id
+    columns: 
+      - name: order_id
+        data_tests:
+          - not_null
+      - name: item_id
+        data_tests:
+          - not_null
+
+  - name: order_payments
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+            combination_of_columns:
+              - order_id
+              - payment_sequential
+    columns: 
+      - name: order_id
+        data_tests:
+          - not_null
+      - name: payment_sequential
+        data_tests:
+          - not_null
+
+  - name: order_reviews
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+            combination_of_columns:
+              - order_id
+              - review_id
+    columns: 
+      - name: order_id
+        data_tests:
+          - not_null
+      - name: review_id
+        data_tests:
+          - not_null
+
+  - name: orders
+    columns: 
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+        
+  - name: product_category_name_translation
+    columns: 
+      - name: category_name_english
+        data_tests:
+          - unique
+          - not_null
+
+  - name: products
+    columns: 
+      - name: product_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: sellers
+    columns: 
+      - name: seller_id
+        data_tests:
+          - unique
+          - not_null
+

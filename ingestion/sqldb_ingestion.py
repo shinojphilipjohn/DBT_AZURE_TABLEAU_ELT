@@ -113,7 +113,11 @@ def blob_file_download(engine):
             file_name=blob["name"][:blob["name"].index(".csv")]
         print("Uploading data from {} to {}!".format(blob["name"],database_name))
         df['loaded_at_timestamp']=datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
-        df.to_sql(file_name,engine,if_exists="replace",chunksize=1000,schema="raw")
+        if file_name=="product_category_name_translation":
+            df.rename(columns={'ï»¿product_category_name': 'product_category_spanish'}, inplace=True)
+            df.to_sql(file_name,engine,if_exists="replace",chunksize=1000,schema="raw")
+        else:
+            df.to_sql(file_name,engine,if_exists="replace",chunksize=1000,schema="raw")
         print("")
         print("Upload complete!")
         print("Next......")
