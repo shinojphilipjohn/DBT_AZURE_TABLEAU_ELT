@@ -1,6 +1,5 @@
 SELECT
 prod.product_id,
-prod.pro_unique,
 prod.product_category_name,
 pdcnt.category_name_english,
 prod.product_name_length,
