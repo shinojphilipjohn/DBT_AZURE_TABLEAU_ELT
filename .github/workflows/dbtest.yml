@@ -63,11 +63,21 @@ jobs:
                 threads: 4
           EOF
 
-      - name : Run dbt
+      - name : Run dbt on DEV env
+        if: github.ref != 'refs/heads/main'
         working-directory: dbt_olist
         run: |
           dbt deps 
-          dbt test
+          dbt run --target dev
+          dbt test --target dev
+
+      - name : Run dbt on PROD env
+        if: github.ref == 'refs/heads/main'
+        working-directory: dbt_olist
+        run: |
+          dbt deps 
+          dbt run --target prod
+          dbt test --target prod
         
 
                   
