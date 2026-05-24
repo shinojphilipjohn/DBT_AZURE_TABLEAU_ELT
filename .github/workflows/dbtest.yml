@@ -1,0 +1,71 @@
+name: dbt test
+on:
+  push:
+    branches:
+      - main
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      
+      - name: Install dbt
+        run: pip install dbt-core dbt-sqlserver
+  
+      - name: Install ODBC Driver
+        run: |
+          curl -sSL -O https://packages.microsoft.com/config/ubuntu/$(grep VERSION_ID /etc/os-release | cut -d '"' -f 2)/packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          rm packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
+
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      
+      - name: Write profiles.yml file
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml <<EOF
+          dbt_olist:
+            target: dev
+            outputs:
+              dev:
+                type: sqlserver
+                driver: 'ODBC Driver 18 for SQL Server'
+                server: ${{ secrets.DB_SERVER }}
+                port: 1433
+                database: ${{ secrets.DB_NAME }}
+                schema: dev_olist
+                authentication: cli
+                threads: 4
+              prod:
+                type: sqlserver
+                driver: 'ODBC Driver 18 for SQL Server'
+                server: ${{ secrets.DB_SERVER }}
+                port: 1433
+                database: ${{ secrets.DB_NAME }}
+                schema: prod_olist
+                authentication: cli
+                threads: 4
+          EOF
+
+      - name : Run dbt
+        working-directory: dbt_olist
+        run: |
+          dbt deps 
+          dbt test
+        
+
+                  
+              
