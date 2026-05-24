@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+  pull-request:
+    branches:
+      - main
 jobs:
   dbt-test:
     runs-on: ubuntu-latest
