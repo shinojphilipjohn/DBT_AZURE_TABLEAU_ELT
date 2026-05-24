@@ -6,7 +6,8 @@ models:
           - unique
           - not_null
           - accepted_values:
-            values: ['fake_value_123']
+            values: 
+              'fake_value_123'
 
   - name: dim_products
     columns:
