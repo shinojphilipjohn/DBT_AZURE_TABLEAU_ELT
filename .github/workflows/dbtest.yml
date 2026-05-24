@@ -17,7 +17,7 @@ jobs:
           python-version: '3.13'
       
       - name: Install dbt
-        run: pip install dbt-core dbt-sqlserver
+        run: pip install dbt-core dbt-sqlserver azure-identity
   
       - name: Install ODBC Driver
         run: |
