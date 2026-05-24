@@ -5,9 +5,6 @@ models:
         data_tests:
           - unique
           - not_null
-          - accepted_values:
-              values: 
-                - fake_value_123
 
   - name: dim_products
     columns:
