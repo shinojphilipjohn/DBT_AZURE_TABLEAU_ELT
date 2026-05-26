@@ -1,4 +1,4 @@
-{{ config(materialized='incremental', schema='mart') }}
+{{ config(materialized='incremental', schema='mart', unique_key=['order_id', 'item_id']) }}
 
 select * from {{ ref('order_items') }}
 
