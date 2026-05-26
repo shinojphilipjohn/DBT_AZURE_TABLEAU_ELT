@@ -7,8 +7,9 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
   schedule:
-    - cron: '05 12 * * *'    # 10:05pm AEST
+    - cron: '11 13 * * *'    # 11:11pm AEST
 jobs:
   dbt-test:
     runs-on: ubuntu-latest
