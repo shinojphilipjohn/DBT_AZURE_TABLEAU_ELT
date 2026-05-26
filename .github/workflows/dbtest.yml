@@ -8,8 +8,8 @@ on:
     branches:
       - main
   workflow_dispatch:
-  schedule:
-    - cron: '11 13 * * *'    # 11:11pm AEST
+  # schedule:
+  #   - cron: '11 13 * * *'    # 11:11pm AEST
 jobs:
   dbt-test:
     runs-on: ubuntu-latest
