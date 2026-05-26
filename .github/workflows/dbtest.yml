@@ -8,7 +8,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '15 12 * * *'    # 10:15pm AEST
+    - cron: '05 12 * * *'    # 10:05pm AEST
 jobs:
   dbt-test:
     runs-on: ubuntu-latest
